@@ -1,5 +1,5 @@
 #+title: my ~/.emacs.d
 
-Peace to you, pilgrim. Welcome to my humble homestead. I just moved in, excuse the mess.
+Welcome pilgrim. This is my new workshop. Excuse the mess.
 
-At the time of writing, I’m on f6e2f30f39 of branch emacs-29.
+I’m using Emacs branch emacs-29 commit a27f61f6f48.

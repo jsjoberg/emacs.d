@@ -1,23 +1,23 @@
 ;; vanilla section
 
-(setq gc-cons-threshold (* 32 1024 1024))
-(setq large-file-warning-threshold (* 100 1024 1024))
-(setq inhibit-splash-screen t)
+(setq gc-cons-threshold (* 32 1024 1024)
+      large-file-warning-threshold (* 100 1024 1024)
+      inhibit-splash-screen t)
 
-(setq backup-directory-alist `(("." . "~/.emacs.d/backup/")))
-(setq backup-by-copying t)
-(setq delete-old-versions t)
-(setq kept-new-versions 6)
-(setq kept-old-versions 2)
-(setq version-control t)
+(setq backup-directory-alist `(("." . "~/.emacs.d/backup/"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
-(setq c-default-style "linux")
-(setq c-basic-offset 4)
-(setq tab-width 4)
-(setq indent-tabs-mode nil)
+(setq c-default-style "linux"
+      c-basic-offset 4
+      tab-width 4
+      indent-tabs-mode nil)
 
-(setq ido-enable-flex-matching t)
-(setq ido-case-fold t)
+(setq ido-enable-flex-matching t
+      ido-case-fold t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -40,17 +40,19 @@
    :height (if state 250 100)
    :weight 'normal))
 
+(big-face nil)
+
 (defun big-face-toggle ()
   (interactive)
   (big-face (not big-face-state)))
-
-(big-face nil)
 
 (add-hook 'after-init-hook 'ido-mode)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (add-hook 'c-mode-hook 'eglot-ensure)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(blink-cursor-mode -1)
 
 ;; third party section
 
@@ -68,23 +70,20 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
-(straight-use-package 'company)
-(straight-use-package 'doom-modeline)
-(straight-use-package 'dracula-theme)
-(straight-use-package 'magit)
-(straight-use-package 'meow)
-(straight-use-package 'rustic)
-(straight-use-package 'tree-sitter)
-(straight-use-package 'tree-sitter-langs)
+(use-package straight :custom (straight-use-package-by-default t))
+
+(setq company-idle-delay 0.0
+      company-minimum-prefix-length 1)
+(use-package company :config (global-company-mode +1))
+(use-package doom-modeline :config (doom-modeline-mode +1))
+(use-package dracula-theme :config (load-theme 'dracula t))
+(use-package magit)
+(use-package rustic)
+(use-package tree-sitter)
+(use-package tree-sitter-langs)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 (straight-use-package 'vterm)
 (straight-use-package 'vterm-toggle)
-
-(load-theme 'dracula t)
-(setq company-idle-delay 0.0)
-(setq company-minimum-prefix-length 1)
-(add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'after-init-hook 'doom-modeline-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
 (defun meow-setup ()
   (defconst meow-cheatsheet-layout-qwerty-swedish
@@ -191,6 +190,7 @@
    '("'" . repeat)
    '("<escape>" . ignore)))
 
+(use-package meow)
 (require 'meow)
 (meow-setup)
 (meow-global-mode +1)
