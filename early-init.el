@@ -44,12 +44,12 @@
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (add-hook 'c-mode-hook 'eglot-ensure)
 
-;; end of vanilla section
+(add-hook
+ 'after-init-hook
+ (lambda ()
+   (setq gc-cons-threshold (* 32 1024 1024))))  ; motto: keep your mottos
 
-(setq
- company-idle-delay 0.0
- company-minimum-prefix-length 1
- )
+;; end of vanilla section
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -78,25 +78,27 @@
    vterm
    vterm-toggle))
 
+(setq
+ company-idle-delay 0.0
+ company-minimum-prefix-length 1
+ )
+(add-hook 'after-init-hook 'global-company-mode)
+
+(add-hook 'after-init-hook 'doom-modeline-mode)
+
 (load-theme 'dracula t)
 
-(add-hook 'after-init-hook 'meow-global-mode)
-(add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'after-init-hook 'doom-modeline-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-(require 'meow)
-
-(defconst meow-cheatsheet-layout-qwerty-swedish
-  '((<TLDE> "§" "½") (<AE01> "1" "!") (<AE02> "2" "\"") (<AE03> "3" "#") (<AE04> "4" "¤") (<AE05> "5" "%") (<AE06> "6" "&")
-    (<AE07> "7" "/") (<AE08> "8" "(") (<AE09> "9" ")") (<AE10> "0" "=") (<AE11> "+" "?") (<AE12> "´" "`") (<AD01> "q" "Q")
-    (<AD02> "w" "W") (<AD03> "e" "E") (<AD04> "r" "R") (<AD05> "t" "T") (<AD06> "y" "Y") (<AD07> "u" "U") (<AD08> "i" "I")
-    (<AD09> "o" "O") (<AD10> "p" "P") (<AD11> "å" "Å") (<AD12> "¨" "^") (<AC01> "a" "A") (<AC02> "s" "S") (<AC03> "d" "D")
-    (<AC04> "f" "F") (<AC05> "g" "G") (<AC06> "h" "H") (<AC07> "j" "J") (<AC08> "k" "K") (<AC09> "l" "L") (<AC10> "ö" "Ö")
-    (<AC11> "ä" "Ä") (<BKSL> "'" "*") (<LSGT> "<" ">") (<AB01> "z" "Z") (<AB02> "x" "X") (<AB03> "c" "C") (<AB04> "v" "V")
-    (<AB05> "b" "B") (<AB06> "n" "N") (<AB07> "m" "M") (<AB08> "," ";") (<AB09> "." ":") (<AB10> "-" "_")))
-
 (defun meow-setup ()
+  (defconst meow-cheatsheet-layout-qwerty-swedish
+    '((<TLDE> "§" "½") (<AE01> "1" "!") (<AE02> "2" "\"") (<AE03> "3" "#") (<AE04> "4" "¤") (<AE05> "5" "%") (<AE06> "6" "&")
+      (<AE07> "7" "/") (<AE08> "8" "(") (<AE09> "9" ")") (<AE10> "0" "=") (<AE11> "+" "?") (<AE12> "´" "`") (<AD01> "q" "Q")
+      (<AD02> "w" "W") (<AD03> "e" "E") (<AD04> "r" "R") (<AD05> "t" "T") (<AD06> "y" "Y") (<AD07> "u" "U") (<AD08> "i" "I")
+      (<AD09> "o" "O") (<AD10> "p" "P") (<AD11> "å" "Å") (<AD12> "¨" "^") (<AC01> "a" "A") (<AC02> "s" "S") (<AC03> "d" "D")
+      (<AC04> "f" "F") (<AC05> "g" "G") (<AC06> "h" "H") (<AC07> "j" "J") (<AC08> "k" "K") (<AC09> "l" "L") (<AC10> "ö" "Ö")
+      (<AC11> "ä" "Ä") (<BKSL> "'" "*") (<LSGT> "<" ">") (<AB01> "z" "Z") (<AB02> "x" "X") (<AB03> "c" "C") (<AB04> "v" "V")
+      (<AB05> "b" "B") (<AB06> "n" "N") (<AB07> "m" "M") (<AB08> "," ";") (<AB09> "." ":") (<AB10> "-" "_")))
   (setq
    meow-cheatsheet-physical-layout meow-cheatsheet-physical-layout-iso
    meow-cheatsheet-layout meow-cheatsheet-layout-qwerty-swedish)
@@ -129,8 +131,8 @@
    '("j" . meow-next)      '("J" . meow-next-expand)
    '("k" . meow-prev)      '("K" . meow-prev-expand)
    '("l" . meow-right)     '("L" . meow-right-expand)
-   '("m" . meow-join)      '("M" . display-line-numbers-mode)
-   '("n" . meow-search)
+   '("m" . meow-join)      '("M" . magit)
+   '("n" . meow-search)    '("N" . display-line-numbers-mode)
    '("o" . meow-block)     '("O" . meow-to-block)
    '("p" . meow-yank)      '("P" . previous-buffer)
    '("q" . meow-quit)      '("Q" . meow-goto-line)
@@ -151,9 +153,6 @@
    '("<escape>" . ignore))
   (meow-define-keys 'insert '("C-c" . meow-normal-mode)))
 
+(require 'meow)
 (meow-setup)
-
-(add-hook
- 'after-init-hook
- (lambda ()
-   (setq gc-cons-threshold (* 32 1024 1024))))  ; motto: keep your word
+(meow-global-mode +1)
