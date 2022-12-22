@@ -24,26 +24,7 @@
 (push '(scroll-bar-lines . 0) default-frame-alist)
 (push '(fullscreen . maximized) default-frame-alist)
 
-(mapc
- (lambda (face)
-   (set-face-attribute face nil :weight 'normal :underline nil))
- (face-list))
-
-(defvar big-face-state)
-
-(defun big-face (state)
-  (setq big-face-state state)
-  (set-face-attribute
-   'default nil
-   :family (if state "Spleen 32x64" "Spleen 16x32")
-   :height (if state 250 100)
-   :weight 'normal))
-
-(big-face nil)
-
-(defun big-face-toggle ()
-  (interactive)
-  (big-face (not big-face-state)))
+(set-face-attribute 'default nil :family "Fantasque Sans Mono" :height 100 :weight 'normal)
 
 (add-hook 'after-init-hook 'ido-mode)
 (add-hook 'c++-mode-hook 'eglot-ensure)
@@ -169,12 +150,13 @@
      '("r" . meow-replace)
      '("R" . meow-swap-grab)
      '("s" . meow-kill)
+     '("S" . text-scale-decrease)
      '("t" . meow-till)
      '("T" . vterm-toggle)
      '("u" . meow-undo)
      '("U" . meow-undo-in-selection)
      '("v" . meow-visit)
-     '("V" . big-face-toggle)
+     '("V" . text-scale-increase)
      '("w" . meow-mark-word)
      '("W" . meow-mark-symbol)
      '("x" . meow-line)
